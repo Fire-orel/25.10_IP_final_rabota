@@ -106,6 +106,19 @@
 </div>
 </div>
 <!-- Header End====================================================================== -->
+<div id="mainBody">
+	<div class="container">
+	<div class="row">
+<!-- Sidebar ================================================== -->
+	<div id="sidebar" class="span3">
+		<ul id="sideManu" class="nav nav-tabs nav-stacked">
+
+			{% for categorii in object_list %}
+			<li><a href="{% url 'shop_electron_product' categorii.slug %}"> {{categorii.name}}</a>
+			</li>
+			{% endfor %}
+		</ul>
+		<br/>
 
 {% block content%}
 
