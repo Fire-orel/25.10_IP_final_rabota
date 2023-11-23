@@ -2,22 +2,9 @@
 {% block content %}
 {% load static %}
 
-		  <div class="thumbnail">
-			<img src="themes/images/products/panasonic.jpg" alt="Bootshop panasonoc New camera"/>
-			<div class="caption">
-			  <h5>Panasonic</h5>
-				<h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-			</div>
-		  </div><br/>
-			<div class="thumbnail">
-				<img src="themes/images/products/kindle.png" title="Bootshop New Kindel" alt="Bootshop Kindel">
-				<div class="caption">
-				  <h5>Kindle</h5>
-				    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-				</div>
-			  </div><br/>
 
-	</div>
+
+
 <!-- Sidebar end=============================================== -->
 	<div class="span9">
     <ul class="breadcrumb">
@@ -229,7 +216,7 @@
 			{% for product in object.themes.all%}
 			<li class="span3">
 			  <div class="thumbnail">
-				<a href=""><img src="{% static 'themes/images/products/'|add:product.img %}" alt=""/></a>
+				<a href="{% url 'shop_product_detail' product.categorii.slug product.id %}"><img src="{% static 'themes/images/products/'|add:product.img %}" alt=""/></a>
 				<div class="caption">
 				  <h5>{{product.name}}</h5>
 				  <p>

@@ -19,8 +19,8 @@ class ProductViews(DetailView):
         return context
 
 class ProductDetailViews(DetailView):
-    template_name='shop/test.html'
-    model=Categorii
+    template_name='shop_electron/product_details.html'
+    model=Product
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)

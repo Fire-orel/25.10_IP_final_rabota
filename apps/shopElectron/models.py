@@ -21,7 +21,10 @@ class Product (models.Model):
     name=models.CharField(verbose_name="Товары",max_length=100)
     price=models.DecimalField(verbose_name="Цена",max_digits=5,decimal_places=2,default="0")
     img=models.CharField(verbose_name="Фото",default=" ",max_length=100)
-    description=models.CharField(verbose_name="Описание",default=" ",max_length=150)
+    img2=models.CharField(verbose_name="Фото2",default=" ",max_length=100)
+    img3=models.CharField(verbose_name="Фото3",default=" ",max_length=100)
+    description=models.TextField(verbose_name="Описание",default=" ")
+    count=models.IntegerField(verbose_name="Количество на остатке",default="0")
 
     class Meta:
         verbose_name='Товар'
