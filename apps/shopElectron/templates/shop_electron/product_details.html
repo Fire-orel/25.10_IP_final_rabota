@@ -11,14 +11,19 @@
     </ul>
 	<div class="row">
 			<div id="gallery" class="span3">
-            <a href="{% static 'themes/images/products/'|add:object.img %}" title="Fujifilm FinePix S2950 Digital Camera">
-				<img src="{% static 'themes/images/products/'|add:object.img %}" style="width:100%" alt="Fujifilm FinePix S2950 Digital Camera"/>
+            <a href="{{object.photos.all.0.img.url}}" title={{object.name}}>
+				<img src="{{object.photos.all.0.img.url}}" style="width:100%" alt={{object.name}}/>
             </a>
 			<div id="differentview" class="moreOptopm carousel slide">
                 <div class="carousel-inner">
                   <div class="item active">
-                   <a href="{% static 'themes/images/products/'|add:object.img2 %}"> <img style="width:29%" src="{% static 'themes/images/products/'|add:object.img2  %}" alt=""/></a>
-                   <a href="{% static 'themes/images/products/'|add:object.img3 %}"> <img style="width:29%" src="{% static 'themes/images/products/'|add:object.img3 %}" alt=""/></a>
+					{% for photo in object.photos.all%}
+					{% if photo.id != object.photos.all.0.id %}
+						<a href={{photo.img.url}}> <img style="width:29%" src={{ photo.img.url }} alt=""/></a>
+					{% endif%}
+					{% endfor%}
+                   {% comment %} <a href="{% static 'themes/images/products/'|add:object.img2 %}"> <img style="width:29%" src="{% static 'themes/images/products/'|add:object.img2  %}" alt=""/></a>
+                   <a href="{% static 'themes/images/products/'|add:object.img3 %}"> <img style="width:29%" src="{% static 'themes/images/products/'|add:object.img3 %}" alt=""/></a> {% endcomment %}
                    {% comment %} <a href="{% static 'themes/images/products/large/f3.jpg'%}" > <img style="width:29%" src="{% static 'themes/images/products/large/f3.jpg'%}" alt=""/></a> {% endcomment %}
                   </div>
                   {% comment %} <div class="item">
