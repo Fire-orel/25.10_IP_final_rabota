@@ -30,6 +30,9 @@ class Product (models.Model):
         ordering=['categorii','id']
     def __str__(self):
         return  "{} - {}".format(self.categorii, self.name)
+    @staticmethod
+    def get_products_by_id(ids):
+        return Product.objects.filter (id__in=ids)
 
 class Photo(models.Model):
     product=models.ForeignKey(Product,on_delete=models.SET_DEFAULT, related_name="photos", verbose_name="Товар", default="None")
@@ -43,7 +46,7 @@ class Photo(models.Model):
         return "{} - {}".format(self.product,self.img)
 class Cart (models.Model):
     user=models.CharField(verbose_name="ID_пользователя",default="None",max_length=50)
-    
+
     product=models.ForeignKey(Product,verbose_name="ID товара товара", on_delete=models.CASCADE)
     def __str__(self):
         return "{} - {}".format(self.product,self.user)

@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
+{% load cart %}
 
-	
+
 <!-- Sidebar end=============================================== -->
 	<div class="span9">
     <ul class="breadcrumb">
@@ -50,24 +51,48 @@
                   <th>Description</th>
                   <th>Quantity/Update</th>
 				  <th>Price</th>
-                  <th>Discount</th>
-                  <th>Tax</th>
                   <th>Total</th>
 				</tr>
               </thead>
               <tbody>
+				{% for product in products%}
                 <tr>
                   <td> <img width="60" src="themes/images/products/4.jpg" alt=""/></td>
-                  <td>MASSA AST<br/>Color : black, Material : metal</td>
+                  <td>{{product.name}}</td>
 				  <td>
-					<div class="input-append"><input class="span1" style="max-width:34px" placeholder="1" id="appendedInputButtons" size="16" type="text"><button class="btn" type="button"><i class="icon-minus"></i></button><button class="btn" type="button"><i class="icon-plus"></i></button><button class="btn btn-danger" type="button"><i class="icon-remove icon-white"></i></button>				</div>
+					<div class="input-append">
+
+						<input class="span1" style="max-width:34px" placeholder={{counts|cart_quantity:product.id}} id="appendedInputButtons" size="16" type="text">
+						<div class="">
+						<form action="" method="post">
+							{% csrf_token %}
+							<input type="hidden" name='product' value='{{product.id}}'>
+							<input  type="hidden" name='remove' value='True'>
+							<input type="submit" value="-" class="btn ">
+							</form>
+						<form action=""  method="post">
+							{% csrf_token %}
+							<input  type="hidden" name='product' value='{{product.id}}'>
+							<input type="submit" value="+" class="btn">
+						</form>
+						</div>
+						{% comment %} <button class="btn" type="button">
+							<i class="icon-minus"></i></button>
+							<button class="btn" type="button">
+								<i class="icon-plus">
+								</i></button>
+								<button class="btn btn-danger" type="button">
+									<i class="icon-remove icon-white"></i></button> {% endcomment %}
+
+					</div>
 				  </td>
-                  <td>$120.00</td>
-                  <td>$25.00</td>
-                  <td>$15.00</td>
-                  <td>$110.00</td>
+                  <td>{{product.price}}</td>
+
+                  <td></td>
+
                 </tr>
-				<tr>
+				{% endfor %}
+				{% comment %} <tr>
                   <td> <img width="60" src="themes/images/products/8.jpg" alt=""/></td>
                   <td>MASSA AST<br/>Color : black, Material : metal</td>
 				  <td>
@@ -88,23 +113,23 @@
                   <td>$25.00</td>
                   <td>$15.00</td>
                   <td>$110.00</td>
-                </tr>
+                </tr> {% endcomment %}
 
                 <tr>
-                  <td colspan="6" style="text-align:right">Total Price:	</td>
+                  <td colspan="4" style="text-align:right">Total Price:	</td>
                   <td> $228.00</td>
                 </tr>
 				 <tr>
-                  <td colspan="6" style="text-align:right">Total Discount:	</td>
+                  <td colspan="4" style="text-align:right">Total Discount:	</td>
                   <td> $50.00</td>
                 </tr>
                  <tr>
-                  <td colspan="6" style="text-align:right">Total Tax:	</td>
+                  <td colspan="4" style="text-align:right">Total Tax:	</td>
                   <td> $31.00</td>
                 </tr>
 				 <tr>
-                  <td colspan="6" style="text-align:right"><strong>TOTAL ($228 - $50 + $31) =</strong></td>
-                  <td class="label label-important" style="display:block"> <strong> $155.00 </strong></td>
+                  <td colspan="4" style="text-align:right"><strong>TOTAL ($228 - $50 + $31) =</strong></td>
+                  <td class="label label-important" style="display:block"> <strong> 000 </strong></td>
                 </tr>
 				</tbody>
             </table>

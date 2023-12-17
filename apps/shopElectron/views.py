@@ -1,5 +1,6 @@
 from typing import Any
 from django.db import models
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.views.generic import ListView,DetailView
 from django.http.response import HttpResponseRedirect
@@ -17,9 +18,23 @@ class ProductViews(DetailView):
     def post(self , request, **kwargs):
         product_id=request.POST.get("product")
         # user_id=request.COOKIES['sessionid']
-        print(request.session.session_key)
-        # cart=Product.objects.create(user=user_id , product=product_id)
-        return HttpResponseRedirect(redirect_to=".")
+        cart = request.session.get('cart')
+        if cart==None:
+            request.session['cart'] = {}
+            cart = request.session.get('cart')
+        # print(cart)
+        if product_id not in cart:
+            cart[product_id] = 1
+
+        else:
+            cart[product_id]=cart[product_id]+1
+
+        # print(request.session.items())
+        # print(cart)
+
+        request.session['cart'] = cart
+        response=HttpResponseRedirect(redirect_to=".")
+        return response
 
     def get_context_data(self, **kwargs):
         object_list=Categorii.objects.all()
@@ -38,6 +53,18 @@ class ProductDetailViews(DetailView):
 class ProductSummary(ListView):
     template_name="shop_electron/product_summary.html"
     model=Categorii
+    
+    def get_context_data(self, *, object_list=None ,**kwargs):
+        context = super().get_context_data(**kwargs)
+        ids = list(self.request.session.get('cart').keys())
+        count=self.request.session.get('cart')
+        products = Product.get_products_by_id(ids)
+
+        context["counts"]=count
+        context["products"]=products
+        # print(ids,products)
+        return context
+
 
 
 
