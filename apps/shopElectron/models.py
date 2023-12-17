@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from datetime import datetime
+from django.contrib.auth.models import User
 
 class Categorii (models.Model):
     name=models.CharField(verbose_name="Категории",max_length=100,)
@@ -40,6 +41,11 @@ class Photo(models.Model):
 
     def __str__(self):
         return "{} - {}".format(self.product,self.img)
-
+class Cart (models.Model):
+    user=models.CharField(verbose_name="ID_пользователя",default="None",max_length=50)
+    
+    product=models.ForeignKey(Product,verbose_name="ID товара товара", on_delete=models.CASCADE)
+    def __str__(self):
+        return "{} - {}".format(self.product,self.user)
 
 # Create your models here.
