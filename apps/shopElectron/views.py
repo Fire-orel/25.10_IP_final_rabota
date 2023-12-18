@@ -53,12 +53,30 @@ class ProductDetailViews(DetailView):
 class ProductSummary(ListView):
     template_name="shop_electron/product_summary.html"
     model=Categorii
-    
+    def post(self , request, **kwargs):
+        cart_check=request.POST.get('cart_check')
+        product = request.POST.get('product')
+        remove = request.POST.get('remove')
+        cart = request.session.get('cart')
+        print(product,remove,cart)
+
+        if cart_check:
+            if remove:
+                cart[product]-=1
+            else:
+                cart[product]+=1
+
+        cart=dict(filter(lambda kv: kv[1] != 0, cart.items()))
+        request.session['cart'] = cart
+        response=HttpResponseRedirect(redirect_to=".")
+        return response
+
     def get_context_data(self, *, object_list=None ,**kwargs):
         context = super().get_context_data(**kwargs)
         ids = list(self.request.session.get('cart').keys())
         count=self.request.session.get('cart')
         products = Product.get_products_by_id(ids)
+
 
         context["counts"]=count
         context["products"]=products

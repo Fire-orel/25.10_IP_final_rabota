@@ -327,7 +327,7 @@
 					{% if product.id != object.id%}
 					<li class="span3">
 					  <div class="thumbnail">
-						<a href="{% url 'shop_product_detail' product.categorii.slug product.id %}"><img src="{% static 'themes/images/products/'|add:product.img %}" alt=""/></a>
+						<a href="{% url 'shop_product_detail' product.categorii.slug product.id %}"><img src="{{product.photos.all.0.img.url}}" alt=""/></a>
 						<div class="caption">
 						  <h5>{{product.name}}</h5>
 						  <p>

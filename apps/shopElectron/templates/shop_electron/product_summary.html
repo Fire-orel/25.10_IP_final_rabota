@@ -10,7 +10,7 @@
 		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
 		<li class="active"> SHOPPING CART</li>
     </ul>
-	<h3>  SHOPPING CART [ <small>3 Item(s) </small>]<a href="products.html" class="btn btn-large pull-right"><i class="icon-arrow-left"></i> Continue Shopping </a></h3>
+	<h3>  SHOPPING CART [ <small>{%countss counts%} Item(s) </small>]<a href="/shop" class="btn btn-large pull-right"><i class="icon-arrow-left"></i> Continue Shopping </a></h3>
 	<hr class="soft"/>
 	<table class="table table-bordered">
 		<tr><th> I AM ALREADY REGISTERED  </th></tr>
@@ -57,24 +57,32 @@
               <tbody>
 				{% for product in products%}
                 <tr>
-                  <td> <img width="60" src="themes/images/products/4.jpg" alt=""/></td>
-                  <td>{{product.name}}</td>
+                  <td> <img width="60" src="{{product.photos.all.0.img.url}}" alt=""/></td>
+                  <td>
+					{% comment %} {{product.name}} {% endcomment %}
+					<a href="{% url 'shop_product_detail' product.categorii.slug product.id %}">{{product.name}}</a>
+
+				  </td>
 				  <td>
 					<div class="input-append">
 
-						<input class="span1" style="max-width:34px" placeholder={{counts|cart_quantity:product.id}} id="appendedInputButtons" size="16" type="text">
 						<div class="">
-						<form action="" method="post">
+						<input class="" style="max-width:34px" placeholder={{counts|cart_quantity:product.id}} id="appendedInputButtons" size="16" type="text">
+
+						<form action="" class="" method="post">
 							{% csrf_token %}
+							<input type="hidden" name='cart_check' value=True>
 							<input type="hidden" name='product' value='{{product.id}}'>
 							<input  type="hidden" name='remove' value='True'>
-							<input type="submit" value="-" class="btn ">
-							</form>
-						<form action=""  method="post">
-							{% csrf_token %}
-							<input  type="hidden" name='product' value='{{product.id}}'>
-							<input type="submit" value="+" class="btn">
+							<input type="submit" value="-" class="btn">
 						</form>
+						<form action="" class="" method="post">
+							{% csrf_token %}
+							<input type="hidden" name='cart_check' value=True>
+							<input  type="hidden" name='product' value='{{product.id}}'>
+							<input type="submit" value=" + " class="btn ">
+						</form>
+
 						</div>
 						{% comment %} <button class="btn" type="button">
 							<i class="icon-minus"></i></button>
@@ -86,9 +94,9 @@
 
 					</div>
 				  </td>
-                  <td>{{product.price}}</td>
+                  <td>${{product.price}}</td>
 
-                  <td></td>
+                  <td>${% cart_summa product.price counts|cart_quantity:product.id%}</td>
 
                 </tr>
 				{% endfor %}
@@ -115,27 +123,28 @@
                   <td>$110.00</td>
                 </tr> {% endcomment %}
 
-                <tr>
+                {% comment %} <tr>
                   <td colspan="4" style="text-align:right">Total Price:	</td>
                   <td> $228.00</td>
-                </tr>
-				 <tr>
+                </tr> {% endcomment %}
+				 {% comment %} <tr>
                   <td colspan="4" style="text-align:right">Total Discount:	</td>
                   <td> $50.00</td>
                 </tr>
                  <tr>
                   <td colspan="4" style="text-align:right">Total Tax:	</td>
                   <td> $31.00</td>
-                </tr>
+                </tr> {% endcomment %}
 				 <tr>
-                  <td colspan="4" style="text-align:right"><strong>TOTAL ($228 - $50 + $31) =</strong></td>
-                  <td class="label label-important" style="display:block"> <strong> 000 </strong></td>
+                  <td colspan="4" style="text-align:right"><strong>TOTAL </strong></td>
+                  <td class="label label-important" style="display:block"> <strong>
+					${% cart_summa_finish products counts %} </strong></td>
                 </tr>
 				</tbody>
             </table>
 
 
-            <table class="table table-bordered">
+            {% comment %} <table class="table table-bordered">
 			<tbody>
 				 <tr>
                   <td>
@@ -181,7 +190,7 @@
 			  </tr>
             </table>
 	<a href="products.html" class="btn btn-large"><i class="icon-arrow-left"></i> Continue Shopping </a>
-	<a href="login.html" class="btn btn-large pull-right">Next <i class="icon-arrow-right"></i></a>
+	<a href="login.html" class="btn btn-large pull-right">Next <i class="icon-arrow-right"></i></a> {% endcomment %}
 
 </div>
 </div></div>
