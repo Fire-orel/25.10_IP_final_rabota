@@ -11,7 +11,7 @@
 		<li><a href="/shop">Home</a> <span class="divider">/</span></li>
 		<li class="active">{{object.name}}</li>
     </ul>
-	<h3> Products Name <small class="pull-right"> 40 products are available </small></h3>
+	<h3> Products Name <small class="pull-right"> </small></h3>
 	<hr class="soft"/>
 	<p>
 		Nowadays the lingerie industry is one of the most successful business spheres.We always stay in touch with the latest fashion tendencies - that is why our goods are so popular and we have a great number of faithful customers all over the country.
@@ -219,9 +219,9 @@
 			  <div class="thumbnail">
 				<a href="{% url 'shop_product_detail' product.categorii.slug product.id %}"><img src="{{product.photos.all.0.img.url}}" alt=""/></a>
 				<div class="caption">
-				  <h5>{{product.name}}</h5>
+				  <h5><a href="{% url 'shop_product_detail' product.categorii.slug product.id %}">{{product.name}}</a></h5>
 				  <p>
-					I'm a paragraph. Click here
+
 				  </p>
 
 
@@ -231,7 +231,7 @@
 					<h4 style="text-align:center"><a class="btn" href="{% url 'shop_product_detail' product.categorii.slug product.id %}"> <i class="icon-zoom-in"></i></a>
 					{% csrf_token %}
 					<input  type="hidden" name='product' value='{{product.id}}'>
-				<input type="submit" value="Add to &euro;{{product.price}}" class="btn"/>
+				<input type="submit" value="Add to $ {{product.price}}" class="btn"/>
 			</h4>
 				</div>
 				</form>

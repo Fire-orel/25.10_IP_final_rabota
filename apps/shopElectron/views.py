@@ -73,14 +73,16 @@ class ProductSummary(ListView):
 
     def get_context_data(self, *, object_list=None ,**kwargs):
         context = super().get_context_data(**kwargs)
-        ids = list(self.request.session.get('cart').keys())
-        count=self.request.session.get('cart')
-        products = Product.get_products_by_id(ids)
+        print(self.request.session.get("cart"))
+        if self.request.session.get("cart")!=None:
+            ids = list(self.request.session.get('cart').keys())
+            count=self.request.session.get('cart')
+            products = Product.get_products_by_id(ids)
 
 
-        context["counts"]=count
-        context["products"]=products
-        # print(ids,products)
+            context["counts"]=count
+            context["products"]=products
+            # print(ids,products)
         return context
 
 
