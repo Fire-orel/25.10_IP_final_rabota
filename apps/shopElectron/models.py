@@ -51,4 +51,32 @@ class Cart (models.Model):
     def __str__(self):
         return "{} - {}".format(self.product,self.user)
 
+class Customers (models.Model):
+    last_name=models.CharField(max_length=50,verbose_name="Фамилия")
+    first_name=models.CharField(max_length=50,verbose_name="Имя")
+    email=models.EmailField()
+    password=models.CharField(max_length=50,verbose_name="Пароль")
+    date_brith=models.DateTimeField(blank=True, null=True,verbose_name="Дата рождения")
+
+    class Meta:
+        verbose_name="Пользователь"
+        verbose_name_plural='Пользователи'
+
+    def get_customer_by_email(email):
+        try:
+            return Customers.objects.get(email= email)
+        except:
+            return False
+
+    def get_customer_by_email_password(email,password):
+        try:
+            return Customers.objects.get(email= email,password=password)
+        except:
+            return False
+
+    def __str__(self):
+        return "{}".format(self.email)
+
+
+
 # Create your models here.

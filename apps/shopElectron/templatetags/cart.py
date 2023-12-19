@@ -17,9 +17,11 @@ def cart_summa(prise,count):
 @register.simple_tag
 def cart_summa_finish(product,count):
     suma=0
+
     for p in product:
+
         suma+=p.price*count[str(p.id)]
-    print(suma)
+    # print(suma)
 
 
     return suma

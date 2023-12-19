@@ -2,18 +2,25 @@ from typing import Any
 from django.db import models
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-from django.views.generic import ListView,DetailView
+from django.views.generic import ListView,DetailView,View
 from django.http.response import HttpResponseRedirect
-from apps.shopElectron.models import Categorii,Product
+from apps.shopElectron.models import Categorii,Product,Customers
 from django.contrib.sessions.backends.db import SessionStore
+from django.shortcuts import redirect
 
 class IndexViews(ListView):
     template_name='shop_electron/index.html'
     model=Categorii
 
+
+
 class ProductViews(DetailView):
     template_name='shop_electron/products.html'
     model=Categorii
+
+
+
+
 
     def post(self , request, **kwargs):
         product_id=request.POST.get("product")
@@ -38,6 +45,7 @@ class ProductViews(DetailView):
 
     def get_context_data(self, **kwargs):
         object_list=Categorii.objects.all()
+
         # products=Product.objects.all
         context=super().get_context_data(**kwargs,object_list=object_list)
         return context
@@ -73,17 +81,74 @@ class ProductSummary(ListView):
 
     def get_context_data(self, *, object_list=None ,**kwargs):
         context = super().get_context_data(**kwargs)
-        ids = list(self.request.session.get('cart').keys())
-        count=self.request.session.get('cart')
-        products = Product.get_products_by_id(ids)
+        print(self.request.session.get("cart"))
+        if self.request.session.get("cart")!=None:
+            ids = list(self.request.session.get('cart').keys())
+            count=self.request.session.get('cart')
+            products = Product.get_products_by_id(ids)
 
 
-        context["counts"]=count
-        context["products"]=products
-        # print(ids,products)
+            context["counts"]=count
+            context["products"]=products
+            # print(ids,products)
         return context
 
+class LoginViews(ListView):
+    template_name="shop_electron/login.html"
+    model=Categorii
+    def post(self , request, **kwargs):
+        email=request.POST.get('email')
+        password=request.POST.get('password')
+
+        # print(email,password)
+
+        data=Customers.get_customer_by_email_password(email,password)
 
 
 
+        if data!=False:
+            # print(type(data))
+            print(data.email)
+            request.session["customer"]=data.email
+
+            response=HttpResponseRedirect(redirect_to="/")
+            return response
+
+        else:
+            response=HttpResponseRedirect(redirect_to=".")
+            return response
+
+
+class RegisterViews(ListView):
+    template_name="shop_electron/register.html"
+    model=Categorii
+
+    def post(self , request, **kwargs):
+        last_name=request.POST.get("last_name")
+        first_name=request.POST.get("first_name")
+        email=request.POST.get("email")
+        password=request.POST.get("password")
+        date=request.POST.get("date")
+
+        check_email=Customers.get_customer_by_email(email)
+        if not check_email:
+            customer=Customers(last_name=last_name,
+                               first_name=first_name,
+                               email=email,
+                               password=password,
+                               date_brith=date)
+            customer.save()
+            request.session["customer"]=email
+
+
+            response=HttpResponseRedirect(redirect_to="/")
+            return response
+        else:
+            response=HttpResponseRedirect(redirect_to=".")
+            return response
+
+
+def logout(request):
+    del request.session["customer"]
+    return redirect('login')
 # Create your views here.
