@@ -4,7 +4,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.views.generic import ListView,DetailView,View
 from django.http.response import HttpResponseRedirect
-from apps.shopElectron.models import Categorii,Product,Customers
+from apps.shopElectron.models import Categorii,Product,Customers,Orders,Orders_detail
 from django.contrib.sessions.backends.db import SessionStore
 from django.shortcuts import redirect
 
@@ -66,7 +66,11 @@ class ProductSummary(ListView):
         product = request.POST.get('product')
         remove = request.POST.get('remove')
         cart = request.session.get('cart')
-        print(product,remove,cart)
+        cart__complite=request.POST.get('cart_complite')
+        email = request.session.get('customer')
+        # product__complite=request.POST.get('product_complite')
+        # count__complite=request.POST.get('counts_complite')
+        # # print(product,remove,cart)
 
         if cart_check:
             if remove:
@@ -74,14 +78,43 @@ class ProductSummary(ListView):
             else:
                 cart[product]+=1
 
-        cart=dict(filter(lambda kv: kv[1] != 0, cart.items()))
-        request.session['cart'] = cart
+            cart=dict(filter(lambda kv: kv[1] != 0, cart.items()))
+            request.session['cart'] = cart
+        elif cart__complite:
+            # print(cart)
+            summa_complite=0
+            orsers_detail=Orders_detail()
+            for item in cart:
+                product=Product.get_products_by_id(item)
+                summa=product[0].price*cart[item]
+                summa_complite+=summa
+            orsers_detail=Orders(
+                            user=email,
+                            suma_pokupki=summa_complite)
+            orsers_detail.save()
+            id_orders=Orders.get_id_by_user()
+            print(id_orders)
+            for item in cart:
+                summa=0
+                product=Product.get_products_by_id(item)
+                summa=product[0].price*cart[item]
+                orders=Orders_detail(
+                    id_orders=id_orders,
+                    id_product=product[0],
+                    quantity=cart[item],
+                    summa=summa
+                )
+                orders.save()
+            del self.request.session["cart"]
+                # print(count__complite[p.id])
+
+
         response=HttpResponseRedirect(redirect_to=".")
         return response
 
     def get_context_data(self, *, object_list=None ,**kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.request.session.get("cart"))
+        # print(self.request.session.get("cart"))
         if self.request.session.get("cart")!=None:
             ids = list(self.request.session.get('cart').keys())
             count=self.request.session.get('cart')
@@ -108,7 +141,7 @@ class LoginViews(ListView):
 
         if data!=False:
             # print(type(data))
-            print(data.email)
+            # print(data.email)
             request.session["customer"]=data.email
 
             response=HttpResponseRedirect(redirect_to="/")

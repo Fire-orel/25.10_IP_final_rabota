@@ -12,7 +12,7 @@
     </ul>
 	<h3>  SHOPPING CART [ <small>{%countss counts%} Item(s) </small>]<a href="" class="btn btn-large pull-right"><i class="icon-arrow-left"></i> Continue Shopping </a></h3>
 	<hr class="soft"/>
-	{% comment %} <table class="table table-bordered">
+	 {% comment %} <table class="table table-bordered">
 		<tr><th> I AM ALREADY REGISTERED  </th></tr>
 		 <tr>
 		 <td>
@@ -31,10 +31,10 @@
 				</div>
 				<div class="control-group">
 				  <div class="controls">
-					<button type="submit" class="btn">Sign in</button> OR <a href="register.html" class="btn">Register Now!</a>
+					<button type="submit" class="btn">Sign in</button> OR <a href="{% url 'register' %}" class="btn">Register Now!</a>
 				  </div>
 				</div>
-				<div class="control-group">
+				 <div class="control-group">
 					<div class="controls">
 					  <a href="forgetpass.html" style="text-decoration:underline">Forgot password ?</a>
 					</div>
@@ -150,6 +150,13 @@
 				</tbody>
             </table>
 
+			<form action="" method="post">
+				{% csrf_token %}
+				<input type="hidden" name='cart_complite' value=True>
+				{% comment %} <input type="hidden" name='product_complite' value="products"> {% endcomment %}
+				{% comment %} <input type="hidden" name='counts_complite' value="countss"> {% endcomment %}
+				<input type="submit" value="Оформить" class="btn">
+			</form>
 
             {% comment %} <table class="table table-bordered">
 			<tbody>
